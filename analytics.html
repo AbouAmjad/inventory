@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Super Design</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Overlay for mobile sidebar -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Header -->
+    <div class="header">
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="header-content">
+            <h1>Analytics & Reports</h1>
+            <div class="user-info">
+                <img src="https://i.pravatar.cc/150?img=12" alt="User">
+                <span>John Doe</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-boxes fa-2x" style="color: var(--sidebar-active);"></i>
+            <h2>Super Design</h2>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li><a href="index.html"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+                <li><a href="inventory.html"><i class="fas fa-box"></i> <span>Inventory</span></a></li>
+                <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> <span>Orders</span></a></li>
+                <li class="active"><a href="analytics.html"><i class="fas fa-chart-line"></i> <span>Analytics</span></a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h2 class="page-title">Analytics & Reports</h2>
+        
+        <div class="analytics-filters">
+            <div class="filter-group">
+                <label for="timePeriod">Time Period:</label>
+                <select id="timePeriod">
+                    <option value="7">Last 7 Days</option>
+                    <option value="30" selected>Last 30 Days</option>
+                    <option value="90">Last 90 Days</option>
+                    <option value="365">Last Year</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="categoryFilter">Category:</label>
+                <select id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="Office Supplies">Office Supplies</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Furniture">Furniture</option>
+                </select>
+            </div>
+            <button class="btn-primary">
+                <i class="fas fa-chart-bar"></i> Generate Report
+            </button>
+        </div>
+
+        <div class="analytics-cards">
+            <div class="analytics-card">
+                <div class="analytics-title">Most Used Items</div>
+                <div class="analytics-content">
+                    <div class="top-item">
+                        <span>Printer Paper A4</span>
+                        <span class="usage-count">342 units</span>
+                    </div>
+                    <div class="top-item">
+                        <span>Pens</span>
+                        <span class="usage-count">156 units</span>
+                    </div>
+                    <div class="top-item">
+                        <span>Ink Cartridges</span>
+                        <span class="usage-count">87 units</span>
+                    </div>
+                    <div class="top-item">
+                        <span>Sticky Notes</span>
+                        <span class="usage-count">64 units</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analytics-card">
+                <div class="analytics-title">Category Distribution</div>
+                <div class="analytics-content">
+                    <div class="category-item">
+                        <span>Office Supplies</span>
+                        <span class="category-percent">65%</span>
+                    </div>
+                    <div class="category-item">
+                        <span>Electronics</span>
+                        <span class="category-percent">20%</span>
+                    </div>
+                    <div class="category-item">
+                        <span>Furniture</span>
+                        <span class="category-percent">10%</span>
+                    </div>
+                    <div class="category-item">
+                        <span>Other</span>
+                        <span class="category-percent">5%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analytics-card">
+                <div class="analytics-title">Usage Trends</div>
+                <div class="analytics-content">
+                    <div class="trend-item positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>Office Supplies: +12%</span>
+                    </div>
+                    <div class="trend-item positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>Electronics: +8%</span>
+                    </div>
+                    <div class="trend-item negative">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>Furniture: -3%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-container full-width">
+            <div class="section-header">
+                <div class="section-title">Monthly Consumption Trends</div>
+            </div>
+            <div style="height: 400px;">
+                <canvas id="analyticsChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="common.js"></script>
+    <script>
+        // Analytics chart
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('analyticsChart').getContext('2d');
+            const analyticsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Office Supplies',
+                        data: [320, 290, 380, 410, 390, 420, 450, 430, 460, 480, 500, 520],
+                        borderColor: 'rgba(46, 139, 87, 1)',
+                        backgroundColor: 'rgba(46, 139, 87, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Electronics',
+                        data: [120, 130, 150, 140, 160, 180, 170, 190, 200, 210, 220, 230],
+                        borderColor: 'rgba(60, 179, 113, 1)',
+                        backgroundColor: 'rgba(60, 179, 113, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Furniture',
+                        data: [80, 75, 85, 90, 95, 100, 105, 100, 110, 115, 120, 125],
+                        borderColor: 'rgba(143, 188, 143, 1)',
+                        backgroundColor: 'rgba(143, 188, 143, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Units Consumed'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
