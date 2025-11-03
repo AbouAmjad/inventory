@@ -33,306 +33,220 @@
         </div>
         <div class="sidebar-menu">
             <ul>
-                <li class="active" data-page="dashboard"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></li>
-                <li data-page="inventory"><i class="fas fa-box"></i> <span>Inventory</span></li>
-                <li data-page="orders"><i class="fas fa-shopping-cart"></i> <span>Orders</span></li>
-                <li data-page="analytics"><i class="fas fa-chart-line"></i> <span>Analytics</span></li>
-                <li data-page="settings"><i class="fas fa-cog"></i> <span>Settings</span></li>
+                <li class="active"><a href="index.html"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+                <li><a href="inventory.html"><i class="fas fa-box"></i> <span>Inventory</span></a></li>
+                <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> <span>Orders</span></a></li>
+                <li><a href="analytics.html"><i class="fas fa-chart-line"></i> <span>Analytics</span></a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
             </ul>
         </div>
     </div>
 
     <!-- Main Content -->
     <div class="main-content">
-        <!-- Dashboard Page -->
-        <div class="page active" id="dashboard-page">
-            <h2 class="page-title">Dashboard</h2>
+        <h2 class="page-title">Dashboard</h2>
 
-            <!-- Time Filter -->
-            <div class="time-filter">
-                <button class="active">Daily</button>
-                <button>Weekly</button>
-                <button>Monthly</button>
+        <!-- Time Filter -->
+        <div class="time-filter">
+            <button class="active">Daily</button>
+            <button>Weekly</button>
+            <button>Monthly</button>
+        </div>
+
+        <!-- Consumption Summary -->
+        <div class="consumption-summary">
+            <div class="summary-card">
+                <i class="fas fa-box-open fa-2x"></i>
+                <div class="summary-value">342</div>
+                <div class="summary-label">Items Used Today</div>
             </div>
-
-            <!-- Consumption Summary -->
-            <div class="consumption-summary">
-                <div class="summary-card">
-                    <i class="fas fa-box-open fa-2x"></i>
-                    <div class="summary-value">342</div>
-                    <div class="summary-label">Items Used Today</div>
-                </div>
-                <div class="summary-card">
-                    <i class="fas fa-dollar-sign fa-2x"></i>
-                    <div class="summary-value">$1,245</div>
-                    <div class="summary-label">Today's Cost</div>
-                </div>
-                <div class="summary-card">
-                    <i class="fas fa-chart-line fa-2x"></i>
-                    <div class="summary-value">12.7%</div>
-                    <div class="summary-label">Increase from Yesterday</div>
-                </div>
-                <div class="summary-card">
-                    <i class="fas fa-exclamation-triangle fa-2x"></i>
-                    <div class="summary-value">8</div>
-                    <div class="summary-label">Items Running Low</div>
-                </div>
+            <div class="summary-card">
+                <i class="fas fa-chart-line fa-2x"></i>
+                <div class="summary-value">12.7%</div>
+                <div class="summary-label">Increase from Yesterday</div>
             </div>
+            <div class="summary-card">
+                <i class="fas fa-exclamation-triangle fa-2x"></i>
+                <div class="summary-value">8</div>
+                <div class="summary-label">Items Running Low</div>
+            </div>
+            <div class="summary-card">
+                <i class="fas fa-clock fa-2x"></i>
+                <div class="summary-value">24</div>
+                <div class="summary-label">Pending Orders</div>
+            </div>
+        </div>
 
-            <!-- Dashboard Cards -->
-            <div class="dashboard-cards">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">Total Items</div>
-                        <div class="card-icon">
-                            <i class="fas fa-boxes"></i>
-                        </div>
-                    </div>
-                    <div class="card-value">1,248</div>
-                    <div class="card-change positive">
-                        <i class="fas fa-arrow-up"></i> 5.2% from last month
+        <!-- Dashboard Cards -->
+        <div class="dashboard-cards">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Total Items</div>
+                    <div class="card-icon">
+                        <i class="fas fa-boxes"></i>
                     </div>
                 </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">Consumables Used</div>
-                        <div class="card-icon">
-                            <i class="fas fa-chart-pie"></i>
-                        </div>
-                    </div>
-                    <div class="card-value">342</div>
-                    <div class="card-change positive">
-                        <i class="fas fa-arrow-up"></i> 12.7% from last month
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">Low Stock Items</div>
-                        <div class="card-icon">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                    </div>
-                    <div class="card-value">28</div>
-                    <div class="card-change negative">
-                        <i class="fas fa-arrow-up"></i> 3.1% from last month
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">Total Value</div>
-                        <div class="card-icon">
-                            <i class="fas fa-dollar-sign"></i>
-                        </div>
-                    </div>
-                    <div class="card-value">$42,580</div>
-                    <div class="card-change positive">
-                        <i class="fas fa-arrow-up"></i> 8.4% from last month
-                    </div>
+                <div class="card-value">1,248</div>
+                <div class="card-change positive">
+                    <i class="fas fa-arrow-up"></i> 5.2% from last month
                 </div>
             </div>
 
-            <!-- Charts and Tables -->
-            <div class="dashboard-content">
-                <div class="chart-container">
-                    <div class="section-header">
-                        <div class="section-title">Consumption Overview</div>
-                        <div class="section-actions">
-                            <button id="exportBtn"><i class="fas fa-file-export"></i> Export to Excel</button>
-                        </div>
-                    </div>
-                    <div style="height: 300px;">
-                        <canvas id="consumptionChart"></canvas>
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Consumables Used</div>
+                    <div class="card-icon">
+                        <i class="fas fa-chart-pie"></i>
                     </div>
                 </div>
-
-                <div class="consumption-container">
-                    <div class="section-header">
-                        <div class="section-title">Top Consumables</div>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Item</th>
-                                <th>Daily Usage</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Printer Paper A4</td>
-                                <td>45 units</td>
-                                <td><span class="status in-stock">In Stock</span></td>
-                            </tr>
-                            <tr>
-                                <td>Ink Cartridges</td>
-                                <td>12 units</td>
-                                <td><span class="status low-stock">Low Stock</span></td>
-                            </tr>
-                            <tr>
-                                <td>Pens</td>
-                                <td>23 units</td>
-                                <td><span class="status in-stock">In Stock</span></td>
-                            </tr>
-                            <tr>
-                                <td>Staplers</td>
-                                <td>5 units</td>
-                                <td><span class="status in-stock">In Stock</span></td>
-                            </tr>
-                            <tr>
-                                <td>Sticky Notes</td>
-                                <td>18 units</td>
-                                <td><span class="status out-of-stock">Out of Stock</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="card-value">342</div>
+                <div class="card-change positive">
+                    <i class="fas fa-arrow-up"></i> 12.7% from last month
                 </div>
             </div>
 
-            <!-- Recent Activity Table -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Low Stock Items</div>
+                    <div class="card-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                </div>
+                <div class="card-value">28</div>
+                <div class="card-change negative">
+                    <i class="fas fa-arrow-up"></i> 3.1% from last month
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Categories</div>
+                    <div class="card-icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                </div>
+                <div class="card-value">14</div>
+                <div class="card-change positive">
+                    <i class="fas fa-arrow-up"></i> 2 new categories
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts and Tables -->
+        <div class="dashboard-content">
             <div class="chart-container">
                 <div class="section-header">
-                    <div class="section-title">Recent Consumption</div>
+                    <div class="section-title">Consumption Overview</div>
+                    <div class="section-actions">
+                        <button id="exportBtn"><i class="fas fa-file-export"></i> Export to Excel</button>
+                    </div>
+                </div>
+                <div style="height: 300px;">
+                    <canvas id="consumptionChart"></canvas>
+                </div>
+            </div>
+
+            <div class="consumption-container">
+                <div class="section-header">
+                    <div class="section-title">Top Consumables</div>
                 </div>
                 <table>
                     <thead>
                         <tr>
-                            <th>Item ID</th>
-                            <th>Item Name</th>
-                            <th>Category</th>
-                            <th>Quantity Used</th>
-                            <th>Date</th>
-                            <th>Cost</th>
+                            <th>Item</th>
+                            <th>Daily Usage</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>#INV-7842</td>
                             <td>Printer Paper A4</td>
-                            <td>Office Supplies</td>
                             <td>45 units</td>
-                            <td>Jun 12, 2023</td>
-                            <td>$45.00</td>
+                            <td><span class="status in-stock">In Stock</span></td>
                         </tr>
                         <tr>
-                            <td>#INV-5391</td>
                             <td>Ink Cartridges</td>
-                            <td>Office Supplies</td>
                             <td>12 units</td>
-                            <td>Jun 12, 2023</td>
-                            <td>$240.00</td>
+                            <td><span class="status low-stock">Low Stock</span></td>
                         </tr>
                         <tr>
-                            <td>#INV-6723</td>
                             <td>Pens</td>
-                            <td>Office Supplies</td>
                             <td>23 units</td>
-                            <td>Jun 11, 2023</td>
-                            <td>$11.50</td>
+                            <td><span class="status in-stock">In Stock</span></td>
                         </tr>
                         <tr>
-                            <td>#INV-1984</td>
                             <td>Staplers</td>
-                            <td>Office Supplies</td>
                             <td>5 units</td>
-                            <td>Jun 11, 2023</td>
-                            <td>$25.00</td>
+                            <td><span class="status in-stock">In Stock</span></td>
                         </tr>
                         <tr>
-                            <td>#INV-2468</td>
                             <td>Sticky Notes</td>
-                            <td>Office Supplies</td>
                             <td>18 units</td>
-                            <td>Jun 10, 2023</td>
-                            <td>$27.00</td>
+                            <td><span class="status out-of-stock">Out of Stock</span></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Inventory Page -->
-        <div class="page" id="inventory-page">
-            <h2 class="page-title">Inventory Management</h2>
-            
-            <div class="inventory-actions">
-                <button class="btn-primary" id="addItemBtn">
-                    <i class="fas fa-plus"></i> Add New Item
-                </button>
-                <button class="btn-secondary" id="exportInventoryBtn">
-                    <i class="fas fa-file-export"></i> Export Inventory
-                </button>
+        <!-- Recent Activity Table -->
+        <div class="chart-container">
+            <div class="section-header">
+                <div class="section-title">Recent Consumption</div>
             </div>
-
-            <!-- Add Item Form -->
-            <div class="form-container" id="addItemForm" style="display: none;">
-                <h3>Add New Inventory Item</h3>
-                <form id="itemForm">
-                    <div class="form-group">
-                        <label for="itemName">Item Name</label>
-                        <input type="text" id="itemName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="itemCategory">Category</label>
-                        <select id="itemCategory" required>
-                            <option value="">Select Category</option>
-                            <option value="Office Supplies">Office Supplies</option>
-                            <option value="Electronics">Electronics</option>
-                            <option value="Furniture">Furniture</option>
-                            <option value="Tools">Tools</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="itemQuantity">Quantity</label>
-                        <input type="number" id="itemQuantity" required min="0">
-                    </div>
-                    <div class="form-group">
-                        <label for="itemPrice">Price ($)</label>
-                        <input type="number" id="itemPrice" step="0.01" required min="0">
-                    </div>
-                    <div class="form-group">
-                        <label for="itemImage">Image URL</label>
-                        <input type="url" id="itemImage" placeholder="https://example.com/image.jpg">
-                    </div>
-                    <div class="form-group">
-                        <label for="itemDescription">Description</label>
-                        <textarea id="itemDescription" rows="3"></textarea>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn-primary">Add Item</button>
-                        <button type="button" class="btn-secondary" id="cancelAddBtn">Cancel</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Inventory Items Grid -->
-            <div class="inventory-grid" id="inventoryGrid">
-                <!-- Items will be dynamically added here -->
-            </div>
-        </div>
-
-        <!-- Other pages would go here -->
-        <div class="page" id="orders-page">
-            <h2 class="page-title">Orders</h2>
-            <p>Orders management page coming soon...</p>
-        </div>
-
-        <div class="page" id="analytics-page">
-            <h2 class="page-title">Analytics</h2>
-            <p>Analytics page coming soon...</p>
-        </div>
-
-        <div class="page" id="settings-page">
-            <h2 class="page-title">Settings</h2>
-            <p>Settings page coming soon...</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item ID</th>
+                        <th>Item Name</th>
+                        <th>Category</th>
+                        <th>Quantity Used</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#INV-7842</td>
+                        <td>Printer Paper A4</td>
+                        <td>Office Supplies</td>
+                        <td>45 units</td>
+                        <td>Jun 12, 2023</td>
+                    </tr>
+                    <tr>
+                        <td>#INV-5391</td>
+                        <td>Ink Cartridges</td>
+                        <td>Office Supplies</td>
+                        <td>12 units</td>
+                        <td>Jun 12, 2023</td>
+                    </tr>
+                    <tr>
+                        <td>#INV-6723</td>
+                        <td>Pens</td>
+                        <td>Office Supplies</td>
+                        <td>23 units</td>
+                        <td>Jun 11, 2023</td>
+                    </tr>
+                    <tr>
+                        <td>#INV-1984</td>
+                        <td>Staplers</td>
+                        <td>Office Supplies</td>
+                        <td>5 units</td>
+                        <td>Jun 11, 2023</td>
+                    </tr>
+                    <tr>
+                        <td>#INV-2468</td>
+                        <td>Sticky Notes</td>
+                        <td>Office Supplies</td>
+                        <td>18 units</td>
+                        <td>Jun 10, 2023</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="script.js"></script>
+    <script src="dashboard.js"></script>
 </body>
 </html>
