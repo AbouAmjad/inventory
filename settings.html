@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Super Design</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Overlay for mobile sidebar -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Header -->
+    <div class="header">
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="header-content">
+            <h1>System Settings</h1>
+            <div class="user-info">
+                <img src="https://i.pravatar.cc/150?img=12" alt="User">
+                <span>John Doe</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-boxes fa-2x" style="color: var(--sidebar-active);"></i>
+            <h2>Super Design</h2>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li><a href="index.html"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+                <li><a href="inventory.html"><i class="fas fa-box"></i> <span>Inventory</span></a></li>
+                <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> <span>Orders</span></a></li>
+                <li><a href="analytics.html"><i class="fas fa-chart-line"></i> <span>Analytics</span></a></li>
+                <li class="active"><a href="settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h2 class="page-title">System Settings</h2>
+        
+        <div class="settings-container">
+            <div class="settings-section">
+                <h3>General Settings</h3>
+                <div class="setting-item">
+                    <label for="companyName">Company Name</label>
+                    <input type="text" id="companyName" value="Super Design">
+                </div>
+                <div class="setting-item">
+                    <label for="timezone">Timezone</label>
+                    <select id="timezone">
+                        <option value="est">Eastern Standard Time (EST)</option>
+                        <option value="pst">Pacific Standard Time (PST)</option>
+                        <option value="cst">Central Standard Time (CST)</option>
+                        <option value="gmt" selected>Greenwich Mean Time (GMT)</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label for="dateFormat">Date Format</label>
+                    <select id="dateFormat">
+                        <option value="mm/dd/yyyy">MM/DD/YYYY</option>
+                        <option value="dd/mm/yyyy" selected>DD/MM/YYYY</option>
+                        <option value="yyyy-mm-dd">YYYY-MM-DD</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Inventory Settings</h3>
+                <div class="setting-item">
+                    <label for="lowStockThreshold">Low Stock Threshold</label>
+                    <input type="number" id="lowStockThreshold" value="10" min="1">
+                    <span class="setting-description">Alert when item quantity falls below this number</span>
+                </div>
+                <div class="setting-item">
+                    <label for="autoReorder">Auto Reorder</label>
+                    <input type="checkbox" id="autoReorder" checked>
+                    <span class="setting-description">Automatically create purchase orders for low stock items</span>
+                </div>
+                <div class="setting-item">
+                    <label for="defaultCategory">Default Category</label>
+                    <select id="defaultCategory">
+                        <option value="Office Supplies">Office Supplies</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Furniture">Furniture</option>
+                        <option value="Other" selected>Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>User Management</h3>
+                <div class="setting-item">
+                    <label for="userRole">Your Role</label>
+                    <input type="text" id="userRole" value="Administrator" disabled>
+                </div>
+                <div class="setting-item">
+                    <label for="emailNotifications">Email Notifications</label>
+                    <input type="checkbox" id="emailNotifications" checked>
+                    <span class="setting-description">Receive email alerts for low stock and system updates</span>
+                </div>
+                <div class="setting-item">
+                    <button class="btn-primary">
+                        <i class="fas fa-user-cog"></i> Manage Users
+                    </button>
+                </div>
+            </div>
+
+            <div class="settings-actions">
+                <button class="btn-primary">
+                    <i class="fas fa-save"></i> Save Settings
+                </button>
+                <button class="btn-secondary">
+                    <i class="fas fa-undo"></i> Reset to Defaults
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="common.js"></script>
+</body>
+</html>
