@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management - Super Design</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Overlay for mobile sidebar -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Header -->
+    <div class="header">
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="header-content">
+            <h1>Inventory Management</h1>
+            <div class="user-info">
+                <img src="https://i.pravatar.cc/150?img=12" alt="User">
+                <span>John Doe</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-boxes fa-2x" style="color: var(--sidebar-active);"></i>
+            <h2>Super Design</h2>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li><a href="index.html"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+                <li class="active"><a href="inventory.html"><i class="fas fa-box"></i> <span>Inventory</span></a></li>
+                <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> <span>Orders</span></a></li>
+                <li><a href="analytics.html"><i class="fas fa-chart-line"></i> <span>Analytics</span></a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h2 class="page-title">Inventory Management</h2>
+        
+        <div class="inventory-actions">
+            <button class="btn-primary" id="addItemBtn">
+                <i class="fas fa-plus"></i> Add New Item
+            </button>
+            <button class="btn-secondary" id="exportInventoryBtn">
+                <i class="fas fa-file-export"></i> Export Inventory
+            </button>
+        </div>
+
+        <!-- Add Item Form -->
+        <div class="form-container" id="addItemForm" style="display: none;">
+            <h3>Add New Inventory Item</h3>
+            <form id="itemForm">
+                <div class="form-group">
+                    <label for="itemName">Item Name</label>
+                    <input type="text" id="itemName" required>
+                </div>
+                <div class="form-group">
+                    <label for="itemCategory">Category</label>
+                    <select id="itemCategory" required>
+                        <option value="">Select Category</option>
+                        <option value="Office Supplies">Office Supplies</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Furniture">Furniture</option>
+                        <option value="Tools">Tools</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="itemQuantity">Quantity</label>
+                    <input type="number" id="itemQuantity" required min="0">
+                </div>
+                <div class="form-group">
+                    <label for="itemImage">Image URL</label>
+                    <input type="url" id="itemImage" placeholder="https://example.com/image.jpg">
+                </div>
+                <div class="form-group">
+                    <label for="itemDescription">Description</label>
+                    <textarea id="itemDescription" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Add Item</button>
+                    <button type="button" class="btn-secondary" id="cancelAddBtn">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Inventory Items Grid -->
+        <div class="inventory-grid" id="inventoryGrid">
+            <!-- Items will be dynamically added here -->
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="inventory.js"></script>
+</body>
+</html>
