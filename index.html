@@ -10,6 +10,7 @@
     <style>
         :root {
             --primary: #4361ee;
+            --primary-light: #4895ef;
             --secondary: #3f37c9;
             --success: #4cc9f0;
             --warning: #f72585;
@@ -20,6 +21,7 @@
             --sidebar-bg: #1e1e2d;
             --sidebar-text: #a2a3b7;
             --sidebar-active: #3699ff;
+            --background: #f5f8fa;
         }
 
         * {
@@ -30,7 +32,7 @@
         }
 
         body {
-            background-color: #f5f8fa;
+            background-color: var(--background);
             color: var(--dark);
             display: flex;
             flex-direction: column;
@@ -43,12 +45,12 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 20px;
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: white;
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
         }
 
         .header h1 {
@@ -75,6 +77,7 @@
             height: 40px;
             border-radius: 50%;
             margin-right: 10px;
+            border: 2px solid rgba(255,255,255,0.3);
         }
 
         /* Sidebar Styles */
@@ -84,10 +87,11 @@
             color: var(--sidebar-text);
             height: 100vh;
             position: fixed;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             z-index: 999;
             transform: translateX(-100%);
             overflow-y: auto;
+            box-shadow: 3px 0 15px rgba(0,0,0,0.1);
         }
 
         .sidebar.active {
@@ -99,6 +103,7 @@
             border-bottom: 1px solid #2d2d3d;
             display: flex;
             align-items: center;
+            background-color: rgba(0,0,0,0.2);
         }
 
         .sidebar-header h2 {
@@ -119,6 +124,8 @@
             padding: 12px 20px;
             transition: all 0.3s;
             cursor: pointer;
+            display: flex;
+            align-items: center;
         }
 
         .sidebar-menu li:hover {
@@ -129,6 +136,7 @@
         .sidebar-menu li.active {
             background-color: var(--sidebar-active);
             color: white;
+            border-left: 4px solid white;
         }
 
         .sidebar-menu i {
@@ -165,27 +173,29 @@
             margin-bottom: 20px;
             color: var(--primary);
             font-weight: 600;
+            font-size: 1.8rem;
         }
 
         /* Dashboard Cards */
         .dashboard-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 15px;
+            gap: 20px;
             margin-bottom: 25px;
         }
 
         .card {
             background-color: var(--card-bg);
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 4px solid var(--primary);
         }
 
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
 
         .card-header {
@@ -202,19 +212,21 @@
         }
 
         .card-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
         }
 
         .card-value {
             font-size: 1.8rem;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 5px;
+            color: var(--dark);
         }
 
         .card-change {
@@ -241,9 +253,9 @@
 
         .chart-container, .consumption-container {
             background-color: var(--card-bg);
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
 
         .section-header {
@@ -262,20 +274,22 @@
         }
 
         .section-actions button {
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: white;
             border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
+            padding: 10px 15px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 0.9rem;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
+            box-shadow: 0 4px 6px rgba(67, 97, 238, 0.3);
         }
 
         .section-actions button:hover {
-            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(67, 97, 238, 0.4);
         }
 
         .section-actions button i {
@@ -338,15 +352,48 @@
             background: none;
             border: 1px solid #e0e0e0;
             padding: 8px 15px;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s;
+            font-weight: 500;
         }
 
         .time-filter button.active {
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: white;
             border-color: var(--primary);
+            box-shadow: 0 4px 6px rgba(67, 97, 238, 0.3);
+        }
+
+        /* Consumption Summary */
+        .consumption-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .summary-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 10px 0;
+            color: var(--primary);
+        }
+
+        .summary-label {
+            font-size: 0.9rem;
+            color: var(--gray);
         }
 
         /* Responsive */
@@ -366,6 +413,10 @@
             }
             
             .card-value {
+                font-size: 1.5rem;
+            }
+            
+            .page-title {
                 font-size: 1.5rem;
             }
         }
@@ -394,6 +445,11 @@
             
             th, td {
                 padding: 8px 10px;
+                font-size: 0.9rem;
+            }
+            
+            .consumption-summary {
+                grid-template-columns: 1fr 1fr;
             }
         }
     </style>
@@ -443,12 +499,36 @@
             <button>Monthly</button>
         </div>
 
+        <!-- Consumption Summary -->
+        <div class="consumption-summary">
+            <div class="summary-card">
+                <i class="fas fa-box-open fa-2x" style="color: var(--primary);"></i>
+                <div class="summary-value">342</div>
+                <div class="summary-label">Items Used Today</div>
+            </div>
+            <div class="summary-card">
+                <i class="fas fa-dollar-sign fa-2x" style="color: #28a745;"></i>
+                <div class="summary-value">$1,245</div>
+                <div class="summary-label">Today's Cost</div>
+            </div>
+            <div class="summary-card">
+                <i class="fas fa-chart-line fa-2x" style="color: #ffc107;"></i>
+                <div class="summary-value">12.7%</div>
+                <div class="summary-label">Increase from Yesterday</div>
+            </div>
+            <div class="summary-card">
+                <i class="fas fa-exclamation-triangle fa-2x" style="color: #dc3545;"></i>
+                <div class="summary-value">8</div>
+                <div class="summary-label">Items Running Low</div>
+            </div>
+        </div>
+
         <!-- Dashboard Cards -->
         <div class="dashboard-cards">
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">Total Items</div>
-                    <div class="card-icon" style="background-color: var(--primary);">
+                    <div class="card-icon">
                         <i class="fas fa-boxes"></i>
                     </div>
                 </div>
@@ -461,7 +541,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">Consumables Used</div>
-                    <div class="card-icon" style="background-color: var(--success);">
+                    <div class="card-icon">
                         <i class="fas fa-chart-pie"></i>
                     </div>
                 </div>
@@ -474,7 +554,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">Low Stock Items</div>
-                    <div class="card-icon" style="background-color: var(--warning);">
+                    <div class="card-icon">
                         <i class="fas fa-exclamation-triangle"></i>
                     </div>
                 </div>
@@ -487,7 +567,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">Total Value</div>
-                    <div class="card-icon" style="background-color: #9c27b0;">
+                    <div class="card-icon">
                         <i class="fas fa-dollar-sign"></i>
                     </div>
                 </div>
@@ -507,7 +587,9 @@
                         <button id="exportBtn"><i class="fas fa-file-export"></i> Export to Excel</button>
                     </div>
                 </div>
-                <canvas id="consumptionChart"></canvas>
+                <div style="height: 300px;">
+                    <canvas id="consumptionChart"></canvas>
+                </div>
             </div>
 
             <div class="consumption-container">
@@ -665,7 +747,8 @@
                     data: [320, 290, 380, 410, 390, 420],
                     backgroundColor: 'rgba(67, 97, 238, 0.7)',
                     borderColor: 'rgba(67, 97, 238, 1)',
-                    borderWidth: 1
+                    borderWidth: 1,
+                    borderRadius: 5,
                 }, {
                     label: 'Consumables Cost',
                     data: [3200, 2900, 3800, 4100, 3900, 4200],
@@ -673,7 +756,8 @@
                     borderColor: 'rgba(76, 201, 240, 1)',
                     borderWidth: 1,
                     type: 'line',
-                    yAxisID: 'y1'
+                    yAxisID: 'y1',
+                    tension: 0.4
                 }]
             },
             options: {
@@ -685,6 +769,9 @@
                         title: {
                             display: true,
                             text: 'Units Consumed'
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
                         }
                     },
                     y1: {
@@ -697,6 +784,16 @@
                         grid: {
                             drawOnChartArea: false
                         }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
                     }
                 }
             }
