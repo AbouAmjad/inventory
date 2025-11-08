@@ -1,0 +1,290 @@
+:root{
+  --primary:#2563eb;
+  --primary-dark:#1d4ed8;
+  --bg:#f9fafb;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+}
+
+*{box-sizing:border-box}
+body{
+  font-family: "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
+  background:var(--bg);
+  color:var(--text);
+  margin:0;
+  padding:16px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.app {
+  max-width:1000px;
+  margin:0 auto;
+}
+
+.header {
+  display:flex;
+  flex-wrap: wrap;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+  position: relative;
+}
+
+.brand {
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.brand h1{
+  margin:0;
+  color:var(--primary);
+  font-size:20px;
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--primary);
+  padding: 8px;
+}
+
+.nav {
+  background:var(--primary);
+  padding:10px 14px;
+  border-radius:10px;
+  display: flex;
+  gap: 10px;
+}
+
+.nav a{
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.nav a:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.container {
+  background:var(--card);
+  border-radius:10px;
+  padding:18px;
+  box-shadow:0 6px 18px rgba(20,20,30,0.06);
+}
+
+.controls {
+  display:flex;
+  flex-direction: column;
+  gap:12px;
+  margin-bottom:14px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input, select, button {
+  padding:12px 14px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  font-size:16px; /* Better for mobile touch */
+  outline:none;
+  width: 100%;
+}
+
+.input:focus, select:focus {
+  border-color:var(--primary);
+}
+
+.button {
+  background:var(--primary);
+  color:#fff;
+  border:none;
+  cursor:pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.button:hover {
+  background: var(--primary-dark);
+}
+
+.button-full {
+  width: 100%;
+}
+
+.button.secondary {
+  background:#fff;
+  color:var(--primary);
+  border:1px solid var(--border);
+}
+
+.grid {
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:12px;
+  margin-bottom:14px;
+}
+
+.card {
+  padding:16px;
+  border-radius:8px;
+  background:linear-gradient(180deg,#fff,#fbfdff);
+  box-shadow:0 4px 12px rgba(10,10,20,0.03);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.card h3 {
+  margin:0;
+  font-size:16px;
+  color:var(--muted);
+  font-weight: 600;
+}
+
+.card .value {
+  font-size:24px;
+  font-weight:700;
+  color:var(--text);
+}
+
+.table-wrap {
+  overflow:auto;
+  margin-top:6px;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  width:100%;
+  border-collapse:collapse;
+  min-width: 500px; /* Ensure table doesn't get too narrow */
+}
+
+th, td {
+  padding:12px 10px;
+  border-bottom:1px solid var(--border);
+  text-align:left;
+  white-space:nowrap;
+}
+
+th {
+  background:var(--primary);
+  color:#fff;
+  position:sticky;
+  top:0;
+  font-weight: 600;
+}
+
+tr:hover td { background:#fbfbff; }
+
+.empty {
+  text-align:center;
+  color:var(--muted);
+  padding:18px;
+}
+
+/* Mobile-first responsive design */
+@media (max-width: 768px) {
+  body {
+    padding: 12px;
+  }
+  
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .menu-toggle {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  
+  .nav {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    padding: 0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .nav-open {
+    display: flex;
+  }
+  
+  .nav a {
+    padding: 14px 16px;
+    border-radius: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  
+  .nav a:last-child {
+    border-bottom: none;
+  }
+  
+  .container {
+    padding: 14px;
+  }
+  
+  .card {
+    padding: 14px;
+  }
+  
+  th, td {
+    padding: 10px 8px;
+    font-size: 14px;
+  }
+}
+
+/* Tablet */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .controls {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .input-group {
+    flex: 1;
+    min-width: 150px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1025px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .controls {
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  
+  .input-group {
+    flex: 1;
+  }
+}
