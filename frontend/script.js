@@ -1,5 +1,5 @@
 let currentUser = null;
-const API_BASE_URL = 'https://api.render.com/deploy/srv-d47gmgk9c44c73c6j2j0?key=ZO9kCYvfj-8'; // Replace with your actual Render URL
+const API_BASE_URL = 'https://store.aics.pro'; // Replace with your actual Render URL
 
 // Check if user is already logged in (from sessionStorage)
 document.addEventListener('DOMContentLoaded', function() {
