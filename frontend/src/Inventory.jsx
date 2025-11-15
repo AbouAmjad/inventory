@@ -15,7 +15,7 @@ export default function Inventory({ user }) {
       setLoading(true)
       setError('')
       
-      const API_BASE = import.meta.env.DEV ? 'http://localhost:3001' : window.location.origin;
+      const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
       const token = JSON.parse(localStorage.getItem('inventory_user')).email; // Simplified
       
       const response = await fetch(`${API_BASE}/api/inventory?token=${token}`)
