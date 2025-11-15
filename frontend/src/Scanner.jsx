@@ -76,7 +76,7 @@ export default function Scanner({ user }) {
         throw new Error('Invalid QR combination. Scan tool first, then person.')
       }
 
-      const API_BASE = import.meta.env.DEV ? 'http://localhost:3001' : window.location.origin;
+      const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
       const token = JSON.parse(localStorage.getItem('inventory_user')).email; // Simplified for demo
       
       const response = await fetch(`${API_BASE}/api/scan`, {
