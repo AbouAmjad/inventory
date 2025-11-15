@@ -1,165 +1,301 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const helmet = require('helmet');
-const { google } = require('googleapis');
 const { OAuth2Client } = require('google-auth-library');
-require('dotenv').config();
-
+const { google } = require('googleapis');
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(helmet());
-app.use(cors());
-app.use(express.json());
-app.use(express.static('../frontend'));
-
-// Google OAuth2 Client
-const oAuth2Client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-
-// Google Sheets setup
-const sheets = google.sheets({ version: 'v4' });
-const auth = new google.auth.GoogleAuth({
-    keyFile: process.env.GOOGLE_SERVICE_ACCOUNT_KEY,
-    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+app.use((req, res, next) => {
+  res.header('X-Content-Type-Options', 'nosniff');
+  res.header('X-Frame-Options', 'DENY');
+  res.header('X-XSS-Protection', '1; mode=block');
+  next();
 });
 
-const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
+app.use(cors({ 
+  origin: process.env.FRONTEND_URL,
+  credentials: true
+}));
+app.use(express.json({ limit: '10mb' }));
 
-// Authorized emails (you can also store this in the spreadsheet)
-const AUTHORIZED_EMAILS = new Set([
-    'admin@yourcompany.com',
-    // Add other authorized emails here
-]);
+const oauthClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-// Verify Google ID token and check authorized emails
-async function verifyTokenAndAuthorize(idToken) {
-    try {
-        const ticket = await oAuth2Client.verifyIdToken({
-            idToken,
-            audience: process.env.GOOGLE_CLIENT_ID,
-        });
-        
-        const payload = ticket.getPayload();
-        const email = payload.email;
-        
-        // Check if email is authorized
-        if (!AUTHORIZED_EMAILS.has(email)) {
-            return null;
-        }
-        
-        return {
-            id: payload.sub,
-            email: payload.email,
-            name: payload.name,
-            picture: payload.picture,
-            id_token: idToken
-        };
-    } catch (error) {
-        console.error('Token verification failed:', error);
-        return null;
-    }
+async function verifyGoogleToken(token) {
+  try {
+    const ticket = await oauthClient.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID
+    });
+    return ticket.getPayload();
+  } catch (e) {
+    throw new Error('Invalid Google token');
+  }
 }
 
-// Routes
-app.post('/api/auth/google', async (req, res) => {
-    const { id_token } = req.body;
+class GoogleSheets {
+  constructor(spreadsheetId, sheetName) {
+    this.spreadsheetId = spreadsheetId;
+    this.sheetName = sheetName;
+  }
+
+  async getAuthClient() {
+    const auth = new google.auth.GoogleAuth({
+      credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT),
+      scopes: ['https://www.googleapis.com/auth/spreadsheets']
+    });
+    return auth.getClient();
+  }
+
+  async getSheetData() {
+    const authClient = await this.getAuthClient();
+    const sheets = google.sheets({ version: 'v4', auth: authClient });
     
-    const user = await verifyTokenAndAuthorize(id_token);
-    if (user) {
-        res.json({ success: true, user });
-    } else {
-        res.status(403).json({ success: false, message: 'Unauthorized email' });
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: this.spreadsheetId,
+      range: `${this.sheetName}!A:Z`
+    });
+    
+    if (!response.data.values || response.data.values.length === 0) {
+      return { headers: [], rows: [] };
     }
+    
+    const [headers, ...rows] = response.data.values;
+    return {
+      headers,
+      rows: rows.map(row => {
+        const obj = {};
+        headers.forEach((header, i) => {
+          obj[header] = row[i] || '';
+        });
+        return obj;
+      })
+    };
+  }
+
+  async updateRow(keyColumn, keyValue, updates) {
+    const authClient = await this.getAuthClient();
+    const sheets = google.sheets({ version: 'v4', auth: authClient });
+    const { headers } = await this.getSheetData();
+    
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: this.spreadsheetId,
+      range: `${this.sheetName}!A:Z`
+    });
+    
+    if (!response.data.values || response.data.values.length < 2) {
+      throw new Error('Sheet is empty');
+    }
+    
+    const rows = response.data.values;
+    const rowIndex = rows.findIndex((row, i) => 
+      i > 0 && row[headers.indexOf(keyColumn)] === keyValue
+    );
+    
+    if (rowIndex === -1) throw new Error(`Row not found for ${keyValue}`);
+    
+    const rowNumber = rowIndex + 1;
+    const updateRange = `${this.sheetName}!A${rowNumber}:ZZ${rowNumber}`;
+    
+    const currentRow = rows[rowIndex];
+    const updatedRow = [...currentRow];
+    
+    Object.entries(updates).forEach(([key, value]) => {
+      const colIndex = headers.indexOf(key);
+      if (colIndex !== -1) updatedRow[colIndex] = value.toString();
+    });
+    
+    await sheets.spreadsheets.values.update({
+      spreadsheetId: this.spreadsheetId,
+      range: updateRange,
+      valueInputOption: 'USER_ENTERED',
+      resource: { values: [updatedRow] }
+    });
+  }
+
+  async appendRow(data) {
+    const authClient = await this.getAuthClient();
+    const sheets = google.sheets({ version: 'v4', auth: authClient });
+    const { headers } = await this.getSheetData();
+    
+    const newRow = headers.map(header => 
+      data[header] !== undefined ? data[header].toString() : ''
+    );
+    
+    await sheets.spreadsheets.values.append({
+      spreadsheetId: this.spreadsheetId,
+      range: `${this.sheetName}!A:A`,
+      valueInputOption: 'USER_ENTERED',
+      resource: { values: [newRow] }
+    });
+  }
+}
+
+app.post('/api/login', async (req, res) => {
+  try {
+    const { token } = req.body;
+    const payload = await verifyGoogleToken(token);
+    
+    const personsSheet = new GoogleSheets(
+      process.env.SPREADSHEET_ID_PERSONS,
+      'Persons'
+    );
+    
+    const { rows: users } = await personsSheet.getSheetData();
+    const user = users.find(u => u.email === payload.email);
+    
+    if (!user) {
+      return res.status(403).json({ 
+        error: 'User not registered in system. Contact administrator.' 
+      });
+    }
+    
+    res.json({
+      name: payload.name,
+      email: payload.email,
+      role: user.role,
+      picture: payload.picture
+    });
+  } catch (e) {
+    console.error('Login error:', e);
+    res.status(401).json({ error: 'Authentication failed' });
+  }
 });
 
-// Get inventory items
-app.get('/api/inventory', async (req, res) => {
-    try {
-        const authHeader = req.headers.authorization;
-        if (!authHeader) {
-            return res.status(401).json({ error: 'No authorization token' });
+app.post('/api/scan', async (req, res) => {
+  try {
+    const { token, qrData, action, renterId } = req.body;
+    const payload = await verifyGoogleToken(token);
+    
+    const personsSheet = new GoogleSheets(
+      process.env.SPREADSHEET_ID_PERSONS,
+      'Persons'
+    );
+    
+    const { rows: users } = await personsSheet.getSheetData();
+    const employee = users.find(u => u.email === payload.email);
+    
+    if (!employee || !['owner', 'employee'].includes(employee.role)) {
+      return res.status(403).json({ error: 'Unauthorized role' });
+    }
+
+    const [prefix, id] = qrData.split(':');
+    
+    if (prefix === 'ITEM') {
+      let itemSheet, sheetName;
+      
+      if (id.startsWith('PT-')) {
+        itemSheet = new GoogleSheets(process.env.SPREADSHEET_ID_POWERTOOLS, 'PowerTools');
+        sheetName = 'PowerTools';
+      } 
+      else if (id.startsWith('CON-')) {
+        itemSheet = new GoogleSheets(process.env.SPREADSHEET_ID_CONSUMABLES, 'Consumables');
+        sheetName = 'Consumables';
+      }
+      else {
+        return res.status(400).json({ error: 'Unsupported item type' });
+      }
+      
+      const { rows: items } = await itemSheet.getSheetData();
+      const item = items.find(i => i.id === id);
+      
+      if (!item) {
+        return res.status(404).json({ error: 'Item not found' });
+      }
+      
+      if (action === 'checkout') {
+        if (item.status !== 'available') {
+          return res.status(400).json({ 
+            error: `Tool is currently ${item.status} - cannot checkout` 
+          });
         }
-
-        const client = await auth.getClient();
         
-        const response = await sheets.spreadsheets.values.get({
-            auth: client,
-            spreadsheetId: SPREADSHEET_ID,
-            range: 'Inventory!A2:D',
+        await itemSheet.updateRow('id', id, {
+          status: 'rented',
+          borrower_id: renterId,
+          due_date: new Date(Date.now() + 7*24*60*60*1000).toISOString().split('T')[0]
         });
-
-        const items = response.data.values ? response.data.values.map((row, index) => ({
-            id: index + 2, // Row number in sheets (2-based index)
-            name: row[0],
-            quantity: parseInt(row[1]),
-            price: parseFloat(row[2]),
-            timestamp: row[3]
-        })) : [];
-
-        res.json({ items });
-    } catch (error) {
-        console.error('Error fetching inventory:', error);
-        res.status(500).json({ error: 'Failed to fetch inventory' });
+      }
+      else if (action === 'return') {
+        await itemSheet.updateRow('id', id, {
+          status: 'available',
+          borrower_id: '',
+          due_date: ''
+        });
+      }
+      
+      const logsSheet = new GoogleSheets(
+        process.env.SPREADSHEET_ID_LOGS,
+        'Logs'
+      );
+      
+      await logsSheet.appendRow({
+        timestamp: new Date().toISOString(),
+        action,
+        item_id: id,
+        person_id: renterId || '',
+        employee_id: employee.id,
+        quantity: 1,
+        notes: `Scanned by ${payload.email}`
+      });
+      
+      res.json({ success: true, message: 'Action completed successfully' });
     }
+    else {
+      res.status(400).json({ error: 'Unsupported QR type' });
+    }
+  } catch (e) {
+    console.error('Scan error:', e);
+    res.status(500).json({ error: 'Server error: ' + e.message });
+  }
 });
 
-// Add inventory item
-app.post('/api/inventory', async (req, res) => {
-    try {
-        const { name, quantity, price } = req.body;
-        const client = await auth.getClient();
-        
-        const timestamp = new Date().toISOString();
-        const newRow = [name, quantity, price, timestamp];
-        
-        await sheets.spreadsheets.values.append({
-            auth: client,
-            spreadsheetId: SPREADSHEET_ID,
-            range: 'Inventory!A2:D',
-            valueInputOption: 'USER_ENTERED',
-            resource: {
-                values: [newRow]
-            }
-        });
-
-        res.json({ success: true });
-    } catch (error) {
-        console.error('Error adding item:', error);
-        res.status(500).json({ error: 'Failed to add item' });
+app.get('/api/inventory', async (req, res) => {
+  try {
+    const { token } = req.query;
+    const payload = await verifyGoogleToken(token);
+    
+    const personsSheet = new GoogleSheets(
+      process.env.SPREADSHEET_ID_PERSONS,
+      'Persons'
+    );
+    
+    const { rows: users } = await personsSheet.getSheetData();
+    const user = users.find(u => u.email === payload.email);
+    
+    if (!user || !['owner', 'engineer'].includes(user.role)) {
+      return res.status(403).json({ error: 'Access denied' });
     }
+    
+    const toolsSheet = new GoogleSheets(
+      process.env.SPREADSHEET_ID_POWERTOOLS,
+      'PowerTools'
+    );
+    
+    const consumablesSheet = new GoogleSheets(
+      process.env.SPREADSHEET_ID_CONSUMABLES,
+      'Consumables'
+    );
+    
+    const [toolsData, consumablesData] = await Promise.all([
+      toolsSheet.getSheetData(),
+      consumablesSheet.getSheetData()
+    ]);
+    
+    res.json({
+      power_tools: toolsData.rows,
+      consumables: consumablesData.rows
+    });
+  } catch (e) {
+    console.error('Inventory error:', e);
+    res.status(500).json({ error: 'Server error' });
+  }
 });
 
-// Delete inventory item
-app.delete('/api/inventory/:id', async (req, res) => {
-    try {
-        const rowId = parseInt(req.params.id);
-        const client = await auth.getClient();
-        
-        await sheets.spreadsheets.batchUpdate({
-            auth: client,
-            spreadsheetId: SPREADSHEET_ID,
-            resource: {
-                requests: [{
-                    deleteDimension: {
-                        range: {
-                            sheetId: 0, // First sheet
-                            dimension: 'ROWS',
-                            startIndex: rowId - 1,
-                            endIndex: rowId
-                        }
-                    }
-                }]
-            }
-        });
-
-        res.json({ success: true });
-    } catch (error) {
-        console.error('Error deleting item:', error);
-        res.status(500).json({ error: 'Failed to delete item' });
-    }
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`✅ Backend running on port ${PORT}`);
 });
