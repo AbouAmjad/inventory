@@ -6,7 +6,7 @@ export default defineConfig({
   build: {
     outDir: 'dist'
   },
-  // Add this to handle module type correctly
+  // Add this to fix module type issues
   resolve: {
     alias: {
       '@': '/src'
