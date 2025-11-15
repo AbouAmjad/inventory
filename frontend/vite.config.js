@@ -6,13 +6,10 @@ export default defineConfig({
   build: {
     outDir: 'dist'
   },
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3001',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      }
+  // Add this to handle module type correctly
+  resolve: {
+    alias: {
+      '@': '/src'
     }
   }
 })
