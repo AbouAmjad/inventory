@@ -215,7 +215,7 @@ export default function Scanner({ user }) {
                       </span>
                     ) : (
                       <span>
-                        {action === 'checkout' ? '✅ Confirm Checkout' : ↩️ Confirm Return'}
+{action === 'checkout' ? '✅ Confirm Checkout' : '↩️ Confirm Return'}
                       </span>
                     )}
                   </button>
